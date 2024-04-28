@@ -47,6 +47,6 @@ step_size = 100000
 for i in range(0, dataset_size, step_size):
     print(f"Translating {i} to {min(i+step_size, dataset_size)}")
     subset_cnt += 1
-    dataset = load_dataset("xmj2002/Chinese_modern_classical", split=f"train[{i}:{min(i+step_size, dataset_size)}]")
-    dataset = dataset.map(translate_modern, batched=True, batch_size=10)
-    dataset.save_to_disk(f"./dataset_translate/subset_{subset_cnt}")
+    dataset_subset = dataset.select(range(i, min(i+step_size, dataset_size)))
+    dataset_subset = dataset_subset.map(translate_modern, batched=True, batch_size=10)
+    dataset_subset.save_to_disk(f"./dataset_translate/subset_{subset_cnt}")
