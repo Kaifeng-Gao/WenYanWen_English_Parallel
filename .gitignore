@@ -1,2 +1,4 @@
 *.ipynb
 *.sh
+datasets/
+config.yaml

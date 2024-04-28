@@ -1,14 +1,19 @@
 from datasets import load_dataset
 import os
 from gemini_loader import GeminiLoader
+from tqdm import tqdm
 import random
 import time
 
 
 CONFIG_PATH = 'config.yaml'
 DATASET_PATH = "KaifengGGG/WenYanWen_English_Parrallel"
-DATASET_SIZE = 10000
-STEP_SIZE = 1000
+DATASET_CONFIG = 'default'
+AUGMENT = False
+DATASET = load_dataset(DATASET_PATH, DATASET_CONFIG, split='train')
+DATASET_SIZE = DATASET.num_rows
+# DATASET_SIZE = 10000
+STEP_SIZE = DATASET_SIZE//10
 TEMPLATES = [
     # without LLM augmented
     "[INST] Translate the following Classical Chinese text into modern Chinese: {classical} [/INST] {modern}",
@@ -130,9 +135,9 @@ def template_dataset(sample, augment):
 
 subset_cnt = 0
 
-for i in range(0, DATASET_SIZE, STEP_SIZE):
+for i in tqdm(range(0, DATASET_SIZE, STEP_SIZE)):
     subset_cnt += 1
-    dataset = load_dataset(DATASET_PATH, split=f"train[{i}:{min(i+STEP_SIZE, DATASET_SIZE)}]")
-    dataset_mistral = dataset.map(template_dataset, fn_kwargs={'augment': False})
-    dataset_mistral.save_to_disk(f"./dataset_instruct_message/subset_{subset_cnt}")
+    dataset_subset = DATASET.select(range(i, min(DATASET_SIZE, i + STEP_SIZE)))
+    dataset_subset = dataset_subset.map(template_dataset, fn_kwargs={'augment': AUGMENT})
+    dataset_subset.save_to_disk(f"datasets/dataset_instruct_message/subset_{subset_cnt}")
 
