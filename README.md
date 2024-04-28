@@ -2,7 +2,7 @@
 
 # **WenYanWen\_English\_Parallel**
 
-This repo is the code for generating and preprocessing the [WenYanWen\_English\_Parallel](https://huggingface.co/datasets/KaifengGGG/WenYanWen_English_Parrallel) dataset.
+This repo is the code for generating and preprocessing the [WenYanWen\_English\_Parallel](https://huggingface.co/datasets/KaifengGGG/WenYanWen_English_Parallel) dataset.
 
 ## **Dataset Summary**
 
